@@ -50,6 +50,10 @@ class Config {
         registry: "0x8011df4830b4f696cd81393997e5371b93338878",
         install_provider_uri: "https://ropsten.infura.io/truffle"
       },
+      ens: {
+        enabled: false,
+        registryAddress: null
+      },
       compilers: {
         solc: {
           settings: {
@@ -84,6 +88,7 @@ class Config {
       logger() {},
       compilers() {},
       subscribers() {},
+      ens() {},
 
       build_directory: {
         default: () => path.join(this.working_directory, "build"),

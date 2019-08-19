@@ -1,14 +1,14 @@
 const debug = require("debug")("contract:execute"); // eslint-disable-line no-unused-vars
-var Web3PromiEvent = require("web3-core-promievent");
-var EventEmitter = require("events");
-var utils = require("./utils");
-var StatusError = require("./statuserror");
-var Reason = require("./reason");
-var handlers = require("./handlers");
-var override = require("./override");
-var reformat = require("./reformat");
+const Web3PromiEvent = require("web3-core-promievent");
+const EventEmitter = require("events");
+const utils = require("./utils");
+const StatusError = require("./statuserror");
+const Reason = require("./reason");
+const handlers = require("./handlers");
+const override = require("./override");
+const reformat = require("./reformat");
 
-var execute = {
+const execute = {
   // -----------------------------------  Helpers --------------------------------------------------
   /**
    * Retrieves gas estimate multiplied by the set gas multiplier for a `sendTransaction` call.
@@ -54,15 +54,27 @@ var execute = {
    * @param  {Array}  _arguments    Arguments passed to method invocation
    * @return {Promise}              Resolves object w/ tx params disambiguated from arguments
    */
-  prepareCall: function(constructor, methodABI, _arguments) {
-    var args = Array.prototype.slice.call(_arguments);
-    var params = utils.getTxParams.call(constructor, methodABI, args);
+  prepareCall: async function(constructor, methodABI, _arguments) {
+    let args = Array.prototype.slice.call(_arguments);
+    let params = utils.getTxParams.call(constructor, methodABI, args);
 
     args = utils.convertToEthersBN(args);
 
-    return constructor.detectNetwork().then(network => {
-      return { args: args, params: params, network: network };
-    });
+    if (constructor.ens && constructor.ens.enabled) {
+      const { web3 } = constructor;
+      const processedValues = await utils.ens.convertENSNames({
+        ensSettings: constructor.ens,
+        inputArgs: args,
+        inputParams: params,
+        methodABI,
+        web3
+      });
+      args = processedValues.args;
+      params = processedValues.params;
+    }
+
+    const network = await constructor.detectNetwork();
+    return { args, params, network };
   },
 
   /**
@@ -99,12 +111,12 @@ var execute = {
    * @return {Promise}             Return value of the call.
    */
   call: function(fn, methodABI, address) {
-    var constructor = this;
+    const constructor = this;
 
-    return function() {
-      var defaultBlock = "latest";
-      var args = Array.prototype.slice.call(arguments);
-      var lastArg = args[args.length - 1];
+    return async function() {
+      let defaultBlock = "latest";
+      let args = Array.prototype.slice.call(arguments);
+      const lastArg = args[args.length - 1];
       var promiEvent = new Web3PromiEvent();
 
       // Extract defaultBlock parameter
@@ -149,8 +161,8 @@ var execute = {
    * @return {PromiEvent}          Resolves a transaction receipt (via the receipt handler)
    */
   send: function(fn, methodABI, address) {
-    var constructor = this;
-    var web3 = constructor.web3;
+    const constructor = this;
+    const web3 = constructor.web3;
 
     return function() {
       var deferred;

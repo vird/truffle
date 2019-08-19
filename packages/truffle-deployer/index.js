@@ -5,6 +5,7 @@ const Deployment = require("./src/deployment");
 const link = require("./src/actions/link");
 const create = require("./src/actions/new");
 const Legacy = require("truffle-legacy-system");
+const ENS = require("./ens");
 const { getLegacyNetworkTypes } = require("truffle-interface-adapter");
 
 class Deployer extends Deployment {
@@ -15,6 +16,8 @@ class Deployer extends Deployment {
     const emitter = new Emittery();
     super(emitter, options);
 
+    const { ens } = options.networks[options.network] || {};
+
     this.emitter = emitter;
     this.chain = new DeferredChain();
     this.logger = options.logger || { log: function() {} };
@@ -24,6 +27,14 @@ class Deployer extends Deployment {
     this.provider = options.provider;
     this.basePath = options.basePath || process.cwd();
     this.known_contracts = {};
+    if (options.ens && options.ens.enabled) {
+      const { registry } = ens || {};
+      const { address } = registry;
+      this.ens = new ENS({
+        provider: options.provider,
+        registryAddress: address
+      });
+    }
 
     (options.contracts || []).forEach(
       contract => (this.known_contracts[contract.contract_name] = contract)

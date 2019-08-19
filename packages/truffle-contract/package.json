@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "bignumber.js": "^7.2.1",
+    "ethereum-ens": "^0.7.7",
     "ethers": "^4.0.0-beta.1",
     "truffle-blockchain-utils": "^0.0.10",
     "truffle-contract-schema": "^3.0.11",
@@ -37,6 +38,7 @@
     "debug": "^4.1.0",
     "ganache-core": "2.5.7",
     "mocha": "5.2.0",
+    "sinon": "^7.3.2",
     "temp": "^0.8.3",
     "truffle-compile": "^4.2.1",
     "uglify-es": "^3.3.9"

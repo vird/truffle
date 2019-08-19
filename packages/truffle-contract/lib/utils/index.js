@@ -1,9 +1,10 @@
-const debug = require("debug")("contract:utils"); // eslint-disable-line no-unused-vars
+const debug = require("debug")("contract:utils");
 const web3Utils = require("web3-utils");
 const bigNumberify = require("ethers/utils/bignumber").bigNumberify;
 const abi = require("web3-eth-abi");
 const BlockchainUtils = require("truffle-blockchain-utils");
-const reformat = require("./reformat");
+const reformat = require("../reformat");
+const ens = require("./ens");
 
 const Utils = {
   is_object(val) {
@@ -110,6 +111,7 @@ const Utils = {
 
     return merged;
   },
+
   parallel(arr, callback = () => {}) {
     if (!arr.length) {
       return callback(null, []);
@@ -212,8 +214,6 @@ const Utils = {
     });
     return converted;
   },
-
-  bigNumberify,
 
   /**
    * Multiplies an ethers.js BigNumber and a number with decimal places using
@@ -336,5 +336,8 @@ const Utils = {
     return { id: TruffleContractInstance.network_id, blockLimit: gasLimit };
   }
 };
+
+Utils.ens = ens;
+Utils.bigNumberify = bigNumberify;
 
 module.exports = Utils;
