@@ -1,8 +1,7 @@
 {
-  "name": "truffle-events",
+  "name": "truffle-eventing",
   "version": "0.0.1",
   "description": "Event system for Truffle",
-  "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
