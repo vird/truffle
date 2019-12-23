@@ -3,20 +3,21 @@
 
 pragma solidity >= 0.4.15 < 0.7.0;
 
-import "truffle/AssertString.sol";
-import "truffle/AssertBytes32.sol";
-import "truffle/AssertAddress.sol";
-import "truffle/AssertBool.sol";
-import "truffle/AssertUint.sol";
-import "truffle/AssertInt.sol";
-import "truffle/AssertUintArray.sol";
-import "truffle/AssertIntArray.sol";
-import "truffle/AssertAddressArray.sol";
+//Path FIX 'truffle/' -> ''
+import "AssertString.sol";
+import "AssertBytes32.sol";
+import "AssertAddress.sol";
+import "AssertBool.sol";
+import "AssertUint.sol";
+import "AssertInt.sol";
+import "AssertUintArray.sol";
+import "AssertIntArray.sol";
+import "AssertAddressArray.sol";
 // import "truffle/AssertAddressPayableArray.sol";
 // ^would require an oldAssert.sol (0.4.0) & a newAssert.sol (0.5.0)
-import "truffle/AssertBytes32Array.sol";
-import "truffle/AssertBalance.sol";
-import "truffle/AssertGeneral.sol";
+import "AssertBytes32Array.sol";
+import "AssertBalance.sol";
+import "AssertGeneral.sol";
 
 /*
     File: Assertions.slb
